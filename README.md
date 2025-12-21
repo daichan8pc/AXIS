@@ -1,8 +1,8 @@
-\# AXIS: Active X-platform Integrated System
+# AXIS: Active X-platform Integrated System
 
 
 
-\## Abstract
+## Abstract
 
 
 
@@ -10,11 +10,11 @@ AXIS is a highly portable, self-contained development environment architecture d
 
 
 
-This repository contains the initialization scripts and configuration definitions for the \*\*v1.0.0 "Awaken"\*\* iteration.
+This repository contains the initialization scripts and configuration definitions for the **v1.0.0 "Awaken"** iteration.
 
 
 
-\## Architecture Overview
+## Architecture Overview
 
 
 
@@ -22,15 +22,15 @@ The system adopts a "Portable Application" approach, eliminating the need for ad
 
 
 
-\* \*\*Core Name:\*\* Awaken (v1.0.0)
+* **Core Name:** Awaken (v1.0.0)
 
-\* \*\*Target Platform:\*\* Windows 10 / 11 (Host), WSL (Optional integration)
+* **Target Platform:** Windows 10 / 11 (Host), WSL (Optional integration)
 
-\* \*\*File System:\*\* NTFS (Optimized for symbolic links and file handling efficiency)
+* **File System:** NTFS (Optimized for symbolic links and file handling efficiency)
 
 
 
-\### System Components
+### System Components
 
 
 
@@ -38,15 +38,15 @@ The environment integrates the following standard development tools in portable 
 
 
 
-\* \*\*Editor:\*\* Visual Studio Code (Portable Mode)
+* **Editor:** Visual Studio Code (Portable Mode)
 
-\* \*\*Version Control:\*\* Git for Windows (Portable Edition)
+* **Version Control:** Git for Windows (Portable Edition)
 
-\* \*\*Security:\*\* KeePassXC (Password Manager \& SSH Agent)
+* **Security:** KeePassXC (Password Manager & SSH Agent)
 
 
 
-\## Directory Structure
+## Directory Structure
 
 
 
@@ -58,7 +58,7 @@ The operational integrity of AXIS relies on the following directory hierarchy. B
 
 AXIS (Root)
 
-├── Start\_Awaken.bat       # Initialization and Environment Injection Script
+├── Start_Awaken.bat       # Initialization and Environment Injection Script
 
 ├── bin/                   # Binary Executables (Git, VSCode, etc.)
 
@@ -82,37 +82,37 @@ AXIS (Root)
 
 
 
-\## Initialization Process
+## Initialization Process
 
 
 
-The system is activated via the `Start\_Awaken.bat` script, which performs the following operations:
+The system is activated via the `Start_Awaken.bat` script, which performs the following operations:
 
 
 
-1\. \*\*Integrity Check:\*\* Verifies the existence of critical binary components.
+1. **Integrity Check:** Verifies the existence of critical binary components.
 
-2\. \*\*Path Injection:\*\* Temporarily injects tool paths into the host's process environment.
+2. **Path Injection:** Temporarily injects tool paths into the host's process environment.
 
-3\. \*\*Home Virtualization:\*\* Overrides `%USERPROFILE%` and `%HOME%` variables to point to the USB storage, ensuring isolation from the host system.
+3. **Home Virtualization:** Overrides `%USERPROFILE%` and `%HOME%` variables to point to the USB storage, ensuring isolation from the host system.
 
-4\. \*\*Shell Execution:\*\* Launches the development console and IDE.
-
-
-
-\## Usage
+4. **Shell Execution:** Launches the development console and IDE.
 
 
 
-1\. Clone this repository to the root of a formatted USB drive (NTFS recommended).
-
-2\. Deploy the required portable binaries into the `bin/` directory.
-
-3\. Execute `Start\_Awaken.bat`.
+## Usage
 
 
 
-\## License
+1. Clone this repository to the root of a formatted USB drive (NTFS recommended).
+
+2. Deploy the required portable binaries into the `bin/` directory.
+
+3. Execute `Start_Awaken.bat`.
+
+
+
+## License
 
 
 
