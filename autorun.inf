@@ -1,0 +1,6 @@
+[autorun]
+; アイコンファイルの指定 (ルートにある axis.ico を使う)
+icon=axis.ico
+
+; エクスプローラーでの表示名 (フォーマット時のラベルより優先される)
+label=AXIS v1.0 "Awaken"
