@@ -4,7 +4,7 @@ home/
 key/
 *.kdbx
 *.log
-
+SystemVolumeInformation/
 # --- 例外（構造維持のために必要な場合） ---
 # 空フォルダだけ維持したい場合は .gitkeep を使うテクニックがありますが、
 # 今回は Start_Awaken.bat があればフォルダ自動生成機能があるので不要です。

@@ -23,11 +23,11 @@ cls
 echo.
 echo  %Cyan%=======================================================%Reset%
 echo  %Cyan%    ___    _  __ ____ ______   %Reset%
-echo  %Cyan%   /   ^|  ^| ^|/ //  _// ____/   %Reset%
+echo  %Cyan%   /   ^|  ^| ^|/ //   _// ____/   %Reset%
 echo  %Cyan%  / /^| ^|  ^|   / / / /___ \     %Reset%
 echo  %Cyan% / ___ ^| /   ^|_/ / ____/ /     %Reset%
 echo  %Cyan%/_/  ^|_^|/_/^|_/___//_____/      %Reset%
-echo  %Cyan%                               %Reset%
+echo  %Cyan%                           %Reset%
 echo  %Cyan%   AXIS v1.0.0 "Awaken" - System Boot Sequence%Reset%
 echo  %Cyan%=======================================================%Reset%
 echo.
@@ -39,6 +39,8 @@ echo.
 set "ALL_SYSTEMS_GO=true"
 
 REM チェックリスト定義 (名前 | パス)
+REM ★ここにPythonのチェックを追加しました
+call :CheckComponent "Python 3.12"  "%AXIS_ROOT%bin\Python\python.exe"
 call :CheckComponent "Git Portable" "%AXIS_ROOT%bin\Git\bin\git.exe"
 call :CheckComponent "VS Code"      "%AXIS_ROOT%bin\VSCode\Code.exe"
 call :CheckComponent "KeePassXC"    "%AXIS_ROOT%bin\KeePassXC\KeePassXC.exe"
@@ -57,6 +59,8 @@ echo  %Green%All Systems Green. Launching "Awaken"...%Reset%
 timeout /t 1 >nul
 
 REM 5. 環境構築 (パス設定 & ホーム偽装)
+REM ★ここにPythonのパスを追加 (USB内のPythonを最優先にする)
+set PATH=%AXIS_ROOT%bin\Python;%AXIS_ROOT%bin\Python\Scripts;%PATH%
 set PATH=%AXIS_ROOT%bin\Git\bin;%PATH%
 set PATH=%AXIS_ROOT%bin\VSCode\bin;%PATH%
 set PATH=%AXIS_ROOT%bin\KeePassXC;%PATH%
@@ -77,6 +81,10 @@ echo    User:    kohane
 echo    Host:    %COMPUTERNAME%
 echo    Drive:   %AXIS_DRIVE%
 echo    Mode:    Portable Environment
+echo.
+REM ★Pythonのバージョンを表示して動作確認
+for /f "tokens=*" %%i in ('python --version 2^>^&1') do set PYTHON_VER=%%i
+echo    Runtime: %Green%!PYTHON_VER!%Reset%
 echo.
 echo  %Green%[Ready]%Reset% Type 'code .' to open VS Code.
 echo.
@@ -109,12 +117,12 @@ if exist %2 (
 ) else (
     echo   [%Red%MISS%Reset%] %~1
     REM フォルダがない場合は自動生成を試みる (REMなら安全)
-    echo          Target not found. Creating...
+    echo           Target not found. Creating...
     mkdir %2 >nul 2>&1
     if exist %2 (
-        echo          [%Green%CREATED%Reset%] Directory created.
+        echo           [%Green%CREATED%Reset%] Directory created.
     ) else (
-        echo          [%Red%FAILED%Reset%] Could not create directory.
+        echo           [%Red%FAILED%Reset%] Could not create directory.
         set "ALL_SYSTEMS_GO=false"
     )
 )
