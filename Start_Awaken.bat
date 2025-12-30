@@ -43,7 +43,6 @@ REM ★ここにPythonのチェックを追加しました
 call :CheckComponent "Python 3.12"  "%AXIS_ROOT%bin\Python\python.exe"
 call :CheckComponent "Git Portable" "%AXIS_ROOT%bin\Git\bin\git.exe"
 call :CheckComponent "VS Code"      "%AXIS_ROOT%bin\VSCode\Code.exe"
-call :CheckComponent "KeePassXC"    "%AXIS_ROOT%bin\KeePassXC\KeePassXC.exe"
 call :CheckDir       "Home Drive"   "%AXIS_ROOT%home"
 call :CheckDir       "Projects"     "%AXIS_ROOT%home\projects"
 
@@ -59,11 +58,9 @@ echo  %Green%All Systems Green. Launching "Awaken"...%Reset%
 timeout /t 1 >nul
 
 REM 5. 環境構築 (パス設定 & ホーム偽装)
-REM ★ここにPythonのパスを追加 (USB内のPythonを最優先にする)
 set PATH=%AXIS_ROOT%bin\Python;%AXIS_ROOT%bin\Python\Scripts;%PATH%
 set PATH=%AXIS_ROOT%bin\Git\bin;%PATH%
 set PATH=%AXIS_ROOT%bin\VSCode\bin;%PATH%
-set PATH=%AXIS_ROOT%bin\KeePassXC;%PATH%
 
 set USERPROFILE=%AXIS_ROOT%home
 set HOME=%AXIS_ROOT%home
