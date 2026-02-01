@@ -1,120 +1,57 @@
-# AXIS: Active X-platform Integrated System
+# Project AXIS
 
+Status:Archived (Development Ceased)
 
+Date: 2026-02-01
 
-## Abstract
+Reason: Performance Bottleneck & Migration to Modern Remote Dev
 
+## 1. 結論
 
+本プロジェクト「AXIS:Active X-platform Integrated System」は、USBメモリのI/O速度（ランダムアクセス性能）が、現代のIDEの要求水準に満たさないという物理的な限界に直面したため、開発及び運用を終了する。
 
-AXIS is a highly portable, self-contained development environment architecture designed to operate independently of the host machine's local configuration. By leveraging a structured directory system and virtualization of environment variables, AXIS enables seamless transition between different workstations (e.g., academic laboratories and personal machines) while maintaining a consistent development experience.
+また、代替手段として自宅サーバーへのWebSSH接続環境が確立されたことや、想定使用環境のBYOD推進により、"どのPCでも管理者権限無しでアクセスさせる"という物理的制約から完全に解放された新たなフェーズへ移行する。
 
+## 2. 直面した技術的課題
 
+AXISの開発・運用過程で発生した主な問題点と、その解決（または未解決）の記録。
 
-This repository contains the initialization scripts and configuration definitions for the \*\*v1.0.0 "Awaken"\*\* iteration.
+### 最大の障壁:ランダムアクセス速度の限界
 
+- 事象: VS Codeの起動、Intellicense(コード補完)の表示、Gitのステータス確認に数十秒~数分のラグが発生し、実用できるレベルのレスポンスが得られなかった。
+- 原因: 一般的なUSBメモリは、シーケンシャル（連続）」な読み書きは速いが、IDEが頻繁に行う「ランダム（不規則で小さな）」な読み書き（4K Random R/W）が極端に遅いため。
+- 教訓: ソフトウェアの快適さは、ストレージのIOPS（1秒あたりの処理回数）に依存する。現代のモダンな開発環境をUSBで動かすには、外付けSSDクラスの性能が必須である。
 
+### 環境変数の複雑性
 
-## Architecture Overview
+- 事象: `git add`時に、`fatal: not a git repository`や`work tree`エラーが多発した。
+- 原因: ホストPCに入っているGitや、以前のセッションの環境変数(`GIT_DIR`, `GIT_WORK_TREE`)が残留し、AXIS内のポータブルGitと競合した。
+- 対応: `start.bat`内で変数を明示的にクリア(`set GIT_DIR=`)するロジックを実装し解決したが、Windowsのバッチファイル制御の難しさを痛感した。
 
+### SSHとホームディレクトリの偽装
 
+- 事象: `ssh`コマンドがUSB内の`home`ではなく、PC本体の`C:\Users\...`を参照してしまい、認証エラーになった。
+- 原因: Windows標準のOpenSSHクライアントが`HOME`環境変数よりも`USERPROFILE`を優先するため。
+- 対応: `start.bat`で`HOMEDRIVE`,`HOMEPATH`も強制的にUSBに向けることで解決。
 
-The system adopts a "Portable Application" approach, eliminating the need for administrative privileges or BIOS modifications on the host machine.
+## 3. アーカイブに至るきっかけ
 
+「環境を持ち運ぶ(USB)」から「環境にアクセスする(Remote)」へのシフトを行った。
 
+AXIS v1.0.0をリリース後、自宅にWebSSH環境(ブラウザからサーバーのターミナルを操作できる環境)を構築したことにより、AXISの存在意義が以下の点で上書きされた。
 
-* \*\*Core Name:\*\* Awaken (v1.0.0)
+1. ゼロ・インストール: ブラウザさえあれば、PCに何も入れなくても開発可能(AXISの目標をより高いレベルで達成)。
+2. パフォーマンス: 処理は高性能な自宅サーバーで行われているため、手元の端末スペックやストレージ速度に依存しない。
+3. 継続性: サーバー上のセッションを維持できるため、場所を変えても作業状態がそのまま残る。
 
-* \*\*Target Platform:\*\* Windows 10 / 11 (Host), WSL (Optional integration)
+## 4. 総括
 
-\* \*\*File System:\*\* NTFS (Optimized for symbolic links and file handling efficiency)
+AXISは速度という実用面での壁に阻まれたが、エンジニアリングの学習教材として以下の成果を果たした。
 
+- Windowsシステムの理解: バッチファイル,環境変数,パスの優先順位
+- Git: フォルダの構造,configのスコープ,`gitignore`の運用
+- セキュリティ: 秘密鍵の管理とポータブル化のリスク管理
 
+このプロジェクトで得た知見は、次の「リモートサーバー構築・運用(自宅サーバー)」において、サーバー内部の環境設計や権限管理の基礎として確実に活かされる。
 
-### System Components
-
-
-
-The environment integrates the following standard development tools in portable mode:
-
-
-
-* \*\*Editor:\*\* Visual Studio Code (Portable Mode)
-
-* \*\*Version Control:\*\* Git for Windows (Portable Edition)
-
-* \*\*Security:\*\* KeePassXC (Password Manager \& SSH Agent)
-
-
-
-## Directory Structure
-
-
-
-The operational integrity of AXIS relies on the following directory hierarchy. Binary files are excluded from this repository to minimize footprint.
-
-
-
-```text
-
-AXIS (Root)
-
-├── Start\_Awaken.bat       # Initialization and Environment Injection Script
-
-├── bin/                   # Binary Executables (Git, VSCode, etc.)
-
-│   ├── Git/
-
-│   ├── VSCode/
-
-│   └── KeePassXC/
-
-├── home/                  # Virtualized User Home Directory
-
-│   ├── projects/          # Source Code Repositories
-
-│   └── settings/          # Configuration Files
-
-└── key/                   # Encrypted Credentials (Local Only)
-
-
-
-```
-
-
-
-## Initialization Process
-
-
-
-The system is activated via the `Start\_Awaken.bat` script, which performs the following operations:
-
-
-
-1. \*\*Integrity Check:\*\* Verifies the existence of critical binary components.
-
-2. \*\*Path Injection:\*\* Temporarily injects tool paths into the host's process environment.
-
-3. \*\*Home Virtualization:\*\* Overrides `%USERPROFILE%` and `%HOME%` variables to point to the USB storage, ensuring isolation from the host system.
-
-4. \*\*Shell Execution:\*\* Launches the development console and IDE.
-
-
-
-## Usage
-
-
-
-1. Clone this repository to the root of a formatted USB drive (NTFS recommended).
-
-2. Deploy the required portable binaries into the `bin/` directory.
-
-3. Execute `Start\_Awaken.bat`.
-
-
-
-## License
-
-
-
-MIT License
-
+**Project AXIS: Archived/Development Ceased**
